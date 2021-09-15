@@ -20,6 +20,7 @@ public class NowPlaying extends AppCompatActivity {
         super.onDestroy();
         mediaPlayer.stop();
         mediaPlayer.release();
+        updateSeek.interrupt();
     }
 
     private TextView textView;
@@ -46,6 +47,7 @@ public class NowPlaying extends AppCompatActivity {
         songs = (ArrayList) bundle.getParcelableArrayList("songList");
         songText = intent.getStringExtra("currentSong");
         textView.setText(songText);
+        textView.setSelected(true);
         position = intent.getIntExtra("position", 0);
         Uri uri = Uri.parse(songs.get(position).toString());
         mediaPlayer = MediaPlayer.create(this,uri);
@@ -77,7 +79,7 @@ public class NowPlaying extends AppCompatActivity {
                 try {
                     while(currPos < mediaPlayer.getDuration())
                     {
-                        currPos = mediaPlayer.getDuration();
+                        currPos = mediaPlayer.getCurrentPosition();
                         seekBar.setProgress(currPos);
                         sleep(800);
                     }
@@ -108,7 +110,59 @@ public class NowPlaying extends AppCompatActivity {
             }
         });
 
-//        prev.setOnClickListener();
+        prev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mediaPlayer.stop();
+                mediaPlayer.release();
+
+                if(position != 0)
+                {
+                    position -= 1;
+
+                }
+
+                else
+                {
+                    position = songs.size() - 1;
+                }
+
+                Uri uri = Uri.parse(songs.get(position).toString());
+                mediaPlayer = MediaPlayer.create(getApplicationContext(),uri);
+                mediaPlayer.start();
+                play.setBackgroundResource(R.drawable.play);
+                seekBar.setMax(mediaPlayer.getDuration());
+                songText = songs.get(position).getName();
+                textView.setText(songText);
+            }
+        });
+
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mediaPlayer.stop();
+                mediaPlayer.release();
+
+                if(position != songs.size() - 1)
+                {
+                    position += 1;
+
+                }
+
+                else
+                {
+                    position = 0;
+                }
+
+                Uri uri = Uri.parse(songs.get(position).toString());
+                mediaPlayer = MediaPlayer.create(getApplicationContext(),uri);
+                mediaPlayer.start();
+                play.setBackgroundResource(R.drawable.play);
+                seekBar.setMax(mediaPlayer.getDuration());
+                songText = songs.get(position).getName();
+                textView.setText(songText);
+            }
+        });
 
     }
 }

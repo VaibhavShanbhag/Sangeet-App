@@ -29,6 +29,11 @@
             android:layout_weight="1"
             android:gravity="fill"
             android:text="TextView"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:ellipsize="marquee"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:fadingEdge="horizontal"
             android:textSize="15sp"
             android:textStyle="bold" />
     </LinearLayout>

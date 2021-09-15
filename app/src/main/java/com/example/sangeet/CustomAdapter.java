@@ -31,6 +31,7 @@ public class CustomAdapter extends ArrayAdapter<String> {
         convertView = LayoutInflater.from(getContext()).inflate(R.layout.custom_screen_layout,parent,false);
         TextView textView = convertView.findViewById(R.id.music);
         textView.setText(getItem(position));
+        textView.setSelected(true);
         return convertView;
     }
 }
