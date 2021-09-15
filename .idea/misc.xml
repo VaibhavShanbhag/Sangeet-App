@@ -4,6 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/VAIBHAV SHANBHAG/AndroidStudioProjects/Sangeet/app/src/main/res/drawable/ic_launcher_background.xml" value="0.19907407407407407" />
+        <entry key="..\:/Users/VAIBHAV SHANBHAG/AndroidStudioProjects/Sangeet/app/src/main/res/drawable/pause.xml" value="0.19907407407407407" />
+        <entry key="..\:/Users/VAIBHAV SHANBHAG/AndroidStudioProjects/Sangeet/app/src/main/res/drawable/play.xml" value="0.19907407407407407" />
         <entry key="..\:/Users/VAIBHAV SHANBHAG/AndroidStudioProjects/Sangeet/app/src/main/res/layout/activity_main.xml" value="0.22447916666666667" />
         <entry key="..\:/Users/VAIBHAV SHANBHAG/AndroidStudioProjects/Sangeet/app/src/main/res/layout/activity_now_playing.xml" value="0.22" />
         <entry key="..\:/Users/VAIBHAV SHANBHAG/AndroidStudioProjects/Sangeet/app/src/main/res/layout/custom_screen_layout.xml" value="0.25" />
