@@ -63,6 +63,7 @@
             android:layout_height="100dp"
             android:layout_weight="1"
             android:background="@drawable/previous"
+            app:backgroundTint="#00b4cb"
             tools:ignore="SpeakableTextPresentCheck" />
 
         <Button
@@ -71,7 +72,7 @@
             android:layout_height="100dp"
             android:layout_weight="1"
             android:background="@drawable/play"
-            app:backgroundTint="#13D4ED"
+            app:backgroundTint="#00b4cb"
             tools:ignore="SpeakableTextPresentCheck" />
 
         <Button
@@ -80,6 +81,7 @@
             android:layout_height="100dp"
             android:layout_weight="1"
             android:background="@drawable/next"
+            app:backgroundTint="#00b4cb"
             tools:ignore="SpeakableTextPresentCheck" />
     </LinearLayout>
 
