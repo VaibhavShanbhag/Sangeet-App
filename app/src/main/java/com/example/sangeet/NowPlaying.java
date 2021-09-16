@@ -23,7 +23,7 @@ public class NowPlaying extends AppCompatActivity {
         updateSeek.interrupt();
     }
 
-    private TextView textView;
+    private TextView textView, start, end;
     private Button prev, play, next;
     private SeekBar seekBar;
     private ArrayList<File> songs;
@@ -41,6 +41,8 @@ public class NowPlaying extends AppCompatActivity {
         play = findViewById(R.id.play);
         next = findViewById(R.id.next);
         seekBar = findViewById(R.id.seekBar);
+        start = findViewById(R.id.start);
+        end = findViewById(R.id.end);
 
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
@@ -53,6 +55,8 @@ public class NowPlaying extends AppCompatActivity {
         mediaPlayer = MediaPlayer.create(this,uri);
         mediaPlayer.start();
         seekBar.setMax(mediaPlayer.getDuration());
+        start.setText("00:00");
+        end.setText(String.valueOf(mediaPlayer.getDuration()));
 
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -80,6 +84,7 @@ public class NowPlaying extends AppCompatActivity {
                     while(currPos < mediaPlayer.getDuration())
                     {
                         currPos = mediaPlayer.getCurrentPosition();
+                        start.setText(String.valueOf(currPos));
                         seekBar.setProgress(currPos);
                         sleep(800);
                     }
@@ -130,6 +135,7 @@ public class NowPlaying extends AppCompatActivity {
                 Uri uri = Uri.parse(songs.get(position).toString());
                 mediaPlayer = MediaPlayer.create(getApplicationContext(),uri);
                 mediaPlayer.start();
+                end.setText(String.valueOf(mediaPlayer.getDuration()));
                 play.setBackgroundResource(R.drawable.play);
                 seekBar.setMax(mediaPlayer.getDuration());
                 songText = songs.get(position).getName();
@@ -157,6 +163,7 @@ public class NowPlaying extends AppCompatActivity {
                 Uri uri = Uri.parse(songs.get(position).toString());
                 mediaPlayer = MediaPlayer.create(getApplicationContext(),uri);
                 mediaPlayer.start();
+                end.setText(String.valueOf(mediaPlayer.getDuration()));
                 play.setBackgroundResource(R.drawable.play);
                 seekBar.setMax(mediaPlayer.getDuration());
                 songText = songs.get(position).getName();
