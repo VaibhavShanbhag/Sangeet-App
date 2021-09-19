@@ -1,11 +1,14 @@
 package com.example.sangeet;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
@@ -23,6 +26,15 @@ public class NowPlaying extends AppCompatActivity {
         updateSeek.interrupt();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home)
+        {
+            onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private TextView textView, start, end;
     private Button prev, play, next;
     private SeekBar seekBar;
@@ -30,12 +42,18 @@ public class NowPlaying extends AppCompatActivity {
     private MediaPlayer mediaPlayer;
     private String songText;
     private int position;
+    private int currPos;
     Thread updateSeek;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_now_playing);
+
+        getSupportActionBar().setTitle("Now Playing");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         textView = findViewById(R.id.songDisplay);
         prev = findViewById(R.id.previous);
         play = findViewById(R.id.play);
@@ -51,13 +69,31 @@ public class NowPlaying extends AppCompatActivity {
         textView.setText(songText + ".mp3");
         textView.setSelected(true);
         position = intent.getIntExtra("position", 0);
+
         Uri uri = Uri.parse(songs.get(position).toString());
         mediaPlayer = MediaPlayer.create(this, uri);
         mediaPlayer.start();
-        seekBar.setMax(mediaPlayer.getDuration());
-        start.setText("00:00");
-        end.setText(String.valueOf(mediaPlayer.getDuration()));
+        end.setText(convertTime(mediaPlayer.getDuration()));
 
+        updateSeek = new Thread() {
+            @Override
+            public void run() {
+                currPos = 0;
+                try {
+                    while (currPos < mediaPlayer.getDuration()) {
+                        sleep(600);
+                        currPos = mediaPlayer.getCurrentPosition();
+                        start.setText(convertTime(currPos));
+                        seekBar.setProgress(currPos);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        updateSeek.start();
+        seekBar.setMax(mediaPlayer.getDuration());
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -76,32 +112,6 @@ public class NowPlaying extends AppCompatActivity {
             }
         });
 
-        updateSeek = new Thread() {
-            @Override
-            public void run() {
-                int currPos = 0;
-                try {
-                    while (currPos < mediaPlayer.getDuration()) {
-                        currPos = mediaPlayer.getCurrentPosition();
-                        start.setText(String.valueOf(currPos));
-                        seekBar.setProgress(currPos);
-                        sleep(600);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-
-        updateSeek.start();
-
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                next.performClick();
-            }
-        });
-
         play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,27 +126,10 @@ public class NowPlaying extends AppCompatActivity {
             }
         });
 
-        prev.setOnClickListener(new View.OnClickListener() {
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
-            public void onClick(View v) {
-                mediaPlayer.stop();
-                mediaPlayer.release();
-
-                if (position != 0) {
-                    position -= 1;
-
-                } else {
-                    position = songs.size() - 1;
-                }
-
-                Uri uri = Uri.parse(songs.get(position).toString());
-                mediaPlayer = MediaPlayer.create(getApplicationContext(), uri);
-                mediaPlayer.start();
-                end.setText(String.valueOf(mediaPlayer.getDuration()));
-                play.setBackgroundResource(R.drawable.play);
-                seekBar.setMax(mediaPlayer.getDuration());
-                songText = songs.get(position).getName();
-                textView.setText(songText);
+            public void onCompletion(MediaPlayer mp) {
+                next.performClick();
             }
         });
 
@@ -155,14 +148,56 @@ public class NowPlaying extends AppCompatActivity {
 
                 Uri uri = Uri.parse(songs.get(position).toString());
                 mediaPlayer = MediaPlayer.create(getApplicationContext(), uri);
-                mediaPlayer.start();
-                end.setText(String.valueOf(mediaPlayer.getDuration()));
-                play.setBackgroundResource(R.drawable.play);
-                seekBar.setMax(mediaPlayer.getDuration());
                 songText = songs.get(position).getName();
                 textView.setText(songText);
+                end.setText(convertTime(mediaPlayer.getDuration()));
+                seekBar.setMax(mediaPlayer.getDuration());
+                currPos = 0;
+                play.setBackgroundResource(R.drawable.play);
+                mediaPlayer.start();
             }
         });
 
+        prev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mediaPlayer.stop();
+                mediaPlayer.release();
+
+                if (position != 0) {
+                    position -= 1;
+
+                } else {
+                    position = songs.size() - 1;
+                }
+
+                Uri uri = Uri.parse(songs.get(position).toString());
+                mediaPlayer = MediaPlayer.create(getApplicationContext(), uri);
+                songText = songs.get(position).getName();
+                textView.setText(songText);
+                end.setText(convertTime(mediaPlayer.getDuration()));
+                seekBar.setMax(mediaPlayer.getDuration());
+                currPos = 0;
+                play.setBackgroundResource(R.drawable.play);
+                mediaPlayer.start();
+            }
+        });
+
+    }
+
+    public String convertTime(int duration)
+    {
+        String time = "";
+        int min = duration/1000/60;
+        int sec = duration/1000%60;
+        time = time + min + ":";
+
+        if (sec < 10)
+        {
+            time += "0";
+        }
+        time += sec;
+
+        return time;
     }
 }
