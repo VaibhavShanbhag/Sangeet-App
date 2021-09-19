@@ -48,11 +48,11 @@ public class NowPlaying extends AppCompatActivity {
         Bundle bundle = intent.getExtras();
         songs = (ArrayList) bundle.getParcelableArrayList("songList");
         songText = intent.getStringExtra("currentSong");
-        textView.setText(songText);
+        textView.setText(songText + ".mp3");
         textView.setSelected(true);
         position = intent.getIntExtra("position", 0);
         Uri uri = Uri.parse(songs.get(position).toString());
-        mediaPlayer = MediaPlayer.create(this,uri);
+        mediaPlayer = MediaPlayer.create(this, uri);
         mediaPlayer.start();
         seekBar.setMax(mediaPlayer.getDuration());
         start.setText("00:00");
@@ -76,22 +76,18 @@ public class NowPlaying extends AppCompatActivity {
             }
         });
 
-        updateSeek = new Thread(){
+        updateSeek = new Thread() {
             @Override
             public void run() {
                 int currPos = 0;
                 try {
-                    while(currPos < mediaPlayer.getDuration())
-                    {
+                    while (currPos < mediaPlayer.getDuration()) {
                         currPos = mediaPlayer.getCurrentPosition();
                         start.setText(String.valueOf(currPos));
                         seekBar.setProgress(currPos);
-                        sleep(800);
+                        sleep(600);
                     }
-                }
-
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -99,15 +95,20 @@ public class NowPlaying extends AppCompatActivity {
 
         updateSeek.start();
 
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                next.performClick();
+            }
+        });
+
         play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mediaPlayer.isPlaying()){
+                if (mediaPlayer.isPlaying()) {
                     mediaPlayer.pause();
                     play.setBackgroundResource(R.drawable.pause);
-                }
-
-                else{
+                } else {
                     mediaPlayer.start();
                     play.setBackgroundResource(R.drawable.play);
                 }
@@ -121,19 +122,15 @@ public class NowPlaying extends AppCompatActivity {
                 mediaPlayer.stop();
                 mediaPlayer.release();
 
-                if(position != 0)
-                {
+                if (position != 0) {
                     position -= 1;
 
-                }
-
-                else
-                {
+                } else {
                     position = songs.size() - 1;
                 }
 
                 Uri uri = Uri.parse(songs.get(position).toString());
-                mediaPlayer = MediaPlayer.create(getApplicationContext(),uri);
+                mediaPlayer = MediaPlayer.create(getApplicationContext(), uri);
                 mediaPlayer.start();
                 end.setText(String.valueOf(mediaPlayer.getDuration()));
                 play.setBackgroundResource(R.drawable.play);
@@ -149,19 +146,15 @@ public class NowPlaying extends AppCompatActivity {
                 mediaPlayer.stop();
                 mediaPlayer.release();
 
-                if(position != songs.size() - 1)
-                {
+                if (position != songs.size() - 1) {
                     position += 1;
 
-                }
-
-                else
-                {
+                } else {
                     position = 0;
                 }
 
                 Uri uri = Uri.parse(songs.get(position).toString());
-                mediaPlayer = MediaPlayer.create(getApplicationContext(),uri);
+                mediaPlayer = MediaPlayer.create(getApplicationContext(), uri);
                 mediaPlayer.start();
                 end.setText(String.valueOf(mediaPlayer.getDuration()));
                 play.setBackgroundResource(R.drawable.play);

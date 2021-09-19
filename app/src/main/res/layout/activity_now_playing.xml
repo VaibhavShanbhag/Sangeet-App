@@ -49,9 +49,9 @@
         app:layout_constraintTop_toBottomOf="@+id/songDisplay" />
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="45dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -60,7 +60,7 @@
         <Button
             android:id="@+id/previous"
             android:layout_width="wrap_content"
-            android:layout_height="100dp"
+            android:layout_height="110dp"
             android:layout_weight="1"
             android:background="@drawable/previous"
             app:backgroundTint="#00b4cb"
@@ -69,7 +69,7 @@
         <Button
             android:id="@+id/play"
             android:layout_width="wrap_content"
-            android:layout_height="100dp"
+            android:layout_height="110dp"
             android:layout_weight="1"
             android:background="@drawable/play"
             app:backgroundTint="#00b4cb"
@@ -78,7 +78,7 @@
         <Button
             android:id="@+id/next"
             android:layout_width="wrap_content"
-            android:layout_height="100dp"
+            android:layout_height="110dp"
             android:layout_weight="1"
             android:background="@drawable/next"
             app:backgroundTint="#00b4cb"
