@@ -3,7 +3,7 @@ Sangeet app is a media player app. Basically it reads the storage from the andro
 <br>The language used to make this is java(backend) and xml(frontend).
 
 # Images
-![1632654231556](https://user-images.githubusercontent.com/87072667/134805094-047c71d3-36cb-479a-8f08-0ae4d625c87c.jpg)
+![1632654231556](<img src="https://user-images.githubusercontent.com/87072667/134805094-047c71d3-36cb-479a-8f08-0ae4d625c87c.jpg" width="250px">)
 <br><br>
 ![1632654231548](https://user-images.githubusercontent.com/87072667/134805112-32e3ddb3-5e50-46c9-86b3-71db76f6ff29.jpg)
 
